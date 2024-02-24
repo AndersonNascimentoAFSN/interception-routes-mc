@@ -1,16 +1,11 @@
+import { Product } from '@/types/product';
 import Image from 'next/image'
 import Link from 'next/link'
 
-
-interface Product {
-  id: string
-  title: string
-  url: string
-  thumbnailUrl: string
-}
-
 function getProducts(): Promise<Product[]> {
-  return fetch("https://jsonplaceholder.typicode.com/photos")
+  return fetch("https://6331c51ecff0e7bf70f62b2c.mockapi.io/products", {
+    cache: "no-store",
+  })
     .then((res) => res.json())
     .catch((err) => console.log(err))
 }
@@ -28,13 +23,15 @@ export default async function Home() {
         {products.slice(0,9).map((product) => (
           <Link href={`/products/${product?.id}`} key={product?.id}>
             <Image
-              src={product?.url}
-              alt={product?.title}
+              src={product?.imageURL}
+              alt={product?.name}
               width={600}
               height={600}
               quality={100}
+              priority
+              className='w-full object-cover aspect-square rounded-md'
             />
-            <p className="text-center font-bold">{product?.title}</p>
+            <p className="text-center font-bold">{product?.name}</p>
           </Link>
         ))}
       </div>
